@@ -7,12 +7,12 @@ using Ex02.ConsoleUtils;
 
 
 
-namespace TIcTacToeLogic
+namespace TicTacToeLogic
 {
     
     internal class TicTacToeLogic
     {
-        internal byte[,] m_Board;
+        private byte[,] m_Board;
         private const byte k_AvailableSlotSign = 0;
 
         private const Boolean m_isValid = true;
@@ -29,13 +29,29 @@ namespace TIcTacToeLogic
 
         }
 
+        internal byte[,] Board
+        {
+            get
+            {
+                return m_Board;
+            }
+        }
+
+        internal int NumberOfMovesRemains
+        {
+            get
+            {
+                return (byte)m_NumberOfMovesRemains;
+            }
+        }
+
         internal bool CanIMakeAMove(int i_Row, int i_Column)
         {
-            bool response = !m_isValid;
+            bool response = m_isValid;
 
-            if (!isThereAWin() && isSlotAvailable(i_Row, i_Column) && m_NumberOfMovesRemains > 0)
+            if (isThereAWin() && !isSlotAvailable(i_Row, i_Column))
             {
-                response = m_isValid;
+                response = !m_isValid;
             }
 
             return response;
@@ -64,6 +80,18 @@ namespace TIcTacToeLogic
             } 
 
             return isSlotAvailable;
+        }
+
+        public bool IsThereTie()
+        {
+            bool isATie = false;
+            
+            if(m_NumberOfMovesRemains == 0)
+            {
+                isATie = m_isValid;
+            }
+
+            return isATie;
         }
 
         public bool isThereAWin() 
