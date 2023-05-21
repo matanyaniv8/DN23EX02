@@ -1,28 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using GameUtils = TIcTacToeUtils.TicTacToeUtils;
-using Coords = TIcTacToeUtils.Coords;
-using Board = TicTacToeLogic.TicTacToeLogic;
+using GameUtils = InverseTicTacToeUtils.InverseTicTacToeUtils;
+using PointsForGame = InverseTicTacToeUtils.PointsForGame;
+using Board = InverseTicTacToeLogic.InverseTicTacToeLogic;
 
-namespace TicTacToeUi
+namespace InverseTicTacToeUi
 {
-    internal class TicTacToeUi
+    internal class InverseTicTacToeUi
     {
         private const String k_PlayerWantsToQuitSign1 = "Q";
         private const String k_PlayerWantsToQuitSign2 = "q";
-        private const int k_PlayerWantsToQuitIntSign = -1;
         private const string k_PlayerWantsAnotherRoundSign1 = "R";
         private const string k_PlayerWantsAnotherRoundSign2 = "r";
+        private const int k_PlayerWantsToQuitIntSign = -1;
+
         private static readonly bool r_isValid = true;
 
-        internal static int getBoardSizeFromUser(Coords i_MinANdMaxAcceptedValue)
+        internal static int getBoardSizeFromUser(PointsForGame i_MinANdMaxAcceptedValue)
         {
             String openingMessage = String.Format(@"Hi, Welcome to TicTacToe game.
-Please enter a number in range {0} -{1}, as the board's size.", i_MinANdMaxAcceptedValue.RowIndex, i_MinANdMaxAcceptedValue.ColumnIndex);
+Please enter a number in range {0} - {1}, as the board's size.", i_MinANdMaxAcceptedValue.RowIndexOrMinValue, i_MinANdMaxAcceptedValue.ColumnIndexOrMaxValue);
 
             Console.WriteLine(openingMessage);
             String userInput = Console.ReadLine();
@@ -35,7 +31,7 @@ Please enter a number in range {0} -{1}, as the board's size.", i_MinANdMaxAccep
 
                 if (isUserInputValid == !r_isValid)
                 {
-                    String message = String.Format(@"Wrong input, please enter size board in range {0} - {1}.", i_MinANdMaxAcceptedValue.RowIndex, i_MinANdMaxAcceptedValue.ColumnIndex);
+                    String message = String.Format(@"Wrong input, please enter size board in range {0} - {1}.", i_MinANdMaxAcceptedValue.RowIndexOrMinValue, i_MinANdMaxAcceptedValue.ColumnIndexOrMaxValue);
                     userInputAsByte = getInputFromUserOnNotValidInput(message, i_MinANdMaxAcceptedValue);
                 }
             }
@@ -43,7 +39,7 @@ Please enter a number in range {0} -{1}, as the board's size.", i_MinANdMaxAccep
             return userInputAsByte;
         }
 
-        internal static int GetNumberOfPlayers(Coords i_MinAndMaxNumOfPlayers)
+        internal static int GetNumberOfPlayers(PointsForGame i_MinAndMaxNumOfPlayers)
         {
             String numOfPlayersOptionsMessage = String.Format(@"How many players?
 it's a game for 2, to play against the computer press 1, else press 2.");
@@ -56,7 +52,7 @@ it's a game for 2, to play against the computer press 1, else press 2.");
             {
                 bool isInputValidNumber = int.TryParse(userInput, out numberOfPlayers);
 
-                if (isInputValidNumber == !r_isValid || numberOfPlayers > i_MinAndMaxNumOfPlayers.ColumnIndex || numberOfPlayers < i_MinAndMaxNumOfPlayers.RowIndex)
+                if (isInputValidNumber == !r_isValid || numberOfPlayers > i_MinAndMaxNumOfPlayers.ColumnIndexOrMaxValue || numberOfPlayers < i_MinAndMaxNumOfPlayers.RowIndexOrMinValue)
                 {
                     String wrongInputMessage = String.Format(@"It's a game for 2.
     If you would like to play against the computer, press 1, else press 2");
@@ -68,13 +64,13 @@ it's a game for 2, to play against the computer press 1, else press 2.");
             return numberOfPlayers;
         }
 
-        internal static Coords GetPlayerMoveIndices(Board i_GameBoard)
+        internal static PointsForGame GetPlayerMoveIndices(Board i_GameBoard)
         {
-            Coords indices = askPlayerForAMove();
+            PointsForGame indices = askPlayerForAMove();
             string possibleErrorType = "";
             bool isMoveApproved = !r_isValid;
 
-            
+
             while (isMoveApproved != r_isValid && indices.IsUserWantsToQuit == !r_isValid)
             {
                 if (i_GameBoard.NumberOfMovesRemains > 0)
@@ -104,48 +100,48 @@ it's a game for 2, to play against the computer press 1, else press 2.");
                 Console.WriteLine(possibleErrorType);
                 indices = askPlayerForAMove();
             }
-            
+
             return indices;
         }
 
-        private static Coords askPlayerForAMove()
+        private static PointsForGame askPlayerForAMove()
         {
             string askForIndices = String.Format(@"Enter you're move with the format - Row Number:Column Number.");
             Console.WriteLine(askForIndices);
 
             char seperator = ':';
             string userInput = Console.ReadLine();
-            Coords indices = new Coords(0,0);
+            PointsForGame indices = new PointsForGame(0, 0);
 
             if (!isUserWantsToQuit(userInput, ref indices))
             {
                 indices = convertStringsToCoordsIndices(userInput, seperator);
             }
-            
+
             return indices;
         }
 
-        private static Coords convertStringsToCoordsIndices(string i_Input, char i_seperator)
+        private static PointsForGame convertStringsToCoordsIndices(string i_Input, char i_seperator)
         {
             string[] subInputs = i_Input.Split(i_seperator);
-            Coords indicesToReturn = new Coords(0, 0);
-            byte convertedByte = 0;           
-            bool rowValueHasInserted =!r_isValid;
+            PointsForGame indicesToReturn = new PointsForGame(0, 0);
+            byte convertedByte = 0;
+            bool rowValueHasInserted = !r_isValid;
 
-            foreach(string subInput in subInputs)
+            foreach (string subInput in subInputs)
             {
                 bool digitToByte = byte.TryParse(subInput, out convertedByte);
 
-                if(digitToByte == r_isValid)
+                if (digitToByte == r_isValid)
                 {
                     if (!rowValueHasInserted)
                     {
-                        indicesToReturn.RowIndex = convertedByte;
+                        indicesToReturn.RowIndexOrMinValue = convertedByte;
                         rowValueHasInserted = r_isValid;
                     }
                     else
                     {
-                        indicesToReturn.ColumnIndex = convertedByte;
+                        indicesToReturn.ColumnIndexOrMaxValue = convertedByte;
                         break;
                     }
                 }
@@ -153,14 +149,14 @@ it's a game for 2, to play against the computer press 1, else press 2.");
 
             return indicesToReturn;
         }
-      
-        private static int getInputFromUserOnNotValidInput(String i_ErrorMessage, Coords i_MinAndMaxValues)
+
+        private static int getInputFromUserOnNotValidInput(String i_ErrorMessage, PointsForGame i_MinAndMaxValues)
         {
-            Console.WriteLine(i_ErrorMessage);            
+            Console.WriteLine(i_ErrorMessage);
             String userInput = Console.ReadLine();
-            int numberToReturn = k_PlayerWantsToQuitIntSign;
+            int numberToReturn = 0;
             bool digitToByte = int.TryParse(userInput, out numberToReturn);
-            bool isUserInputValid = GameUtils.isUserInputAValidNumber(numberToReturn,i_MinAndMaxValues);
+            bool isUserInputValid = GameUtils.isUserInputAValidNumber(numberToReturn, i_MinAndMaxValues);
             bool isUserWantsQuit = isUserWantsToQuit(userInput, ref i_MinAndMaxValues);
 
             while (isUserInputValid == !r_isValid && !isUserWantsQuit)
@@ -182,7 +178,7 @@ it's a game for 2, to play against the computer press 1, else press 2.");
             return numberToReturn;
         }
 
-        private static bool isUserWantsToQuit(string i_userInput, ref Coords i_Indices)
+        private static bool isUserWantsToQuit(string i_userInput, ref PointsForGame i_Indices)
         {
             bool isUserWantsToQuitFromGame = i_userInput.Equals(k_PlayerWantsToQuitSign1) || i_userInput.Equals(k_PlayerWantsToQuitSign2);
 
@@ -200,12 +196,12 @@ it's a game for 2, to play against the computer press 1, else press 2.");
             string scoresDetails = String.Format(@"Final Results are: 
 X has won {0} times.
 O has Won {1} times.
-If you wnat another round, please press {2} or {3}", i_Results[0].ToString(), i_Results[1].ToString(), k_PlayerWantsAnotherRoundSign1, k_PlayerWantsAnotherRoundSign2);
+If you want another round, please press {2} or {3}", i_Results[0].ToString(), i_Results[1].ToString(), k_PlayerWantsAnotherRoundSign1, k_PlayerWantsAnotherRoundSign2);
 
             Console.WriteLine(scoresDetails);
             string userResponse = Console.ReadLine();
 
-            if(userResponse.Equals(k_PlayerWantsAnotherRoundSign1) || userResponse.Equals(k_PlayerWantsAnotherRoundSign2))
+            if (userResponse.Equals(k_PlayerWantsAnotherRoundSign1) || userResponse.Equals(k_PlayerWantsAnotherRoundSign2))
             {
                 isThereAntoherRound = r_isValid;
             }

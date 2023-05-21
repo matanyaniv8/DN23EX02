@@ -1,25 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GameUi = TicTacToeUi.TicTacToeUi;
-using GameUtils = TIcTacToeUtils.TicTacToeUtils;
-using Points = TIcTacToeUtils.Coords;
-using GameLogic = TicTacToeLogic.TicTacToeLogic;
+﻿using GameUi = InverseTicTacToeUi.InverseTicTacToeUi;
+using GameUtils = InverseTicTacToeUtils.InverseTicTacToeUtils;
+using Points = InverseTicTacToeUtils.PointsForGame;
+using GameLogic = InverseTicTacToeLogic.InverseTicTacToeLogic;
 
 namespace RunGame
 {
     internal class RunGame
     {
-        private static readonly bool r_isValid = true;
-        private static readonly int r_MinBoardSize = 3;
-        private static readonly int r_MaxBoardSize = 9;
-        private static readonly int r_MinNumOfPlayers = 1;
-        private static readonly int r_MaxNumOfPlayers = 2;
-        private const int k_XHasWon = 1;
-        private const int k_CircleHasWon = 2;
-        private const int k_PlayerWantsToQuitIntSign = -1;
+        private const int k_MinBoardSize = 3;
+        private const int k_MaxBoardSize = 9;
+        private const int k_MiNumOfPlayers = 1;
+        private const int k_MaxNumOfPlayers = 2;
+
         public static void Main()
         {
             RunProgram();
@@ -27,17 +19,17 @@ namespace RunGame
 
         private static void RunProgram()
         {
-            Points minAndMaxNumberOfPlayers = new Points(1, 2);
-            Points minMaxSizeOfBoard = new Points(3, 9);
+            Points minAndMaxNumberOfPlayers = new Points(k_MiNumOfPlayers, k_MaxNumOfPlayers);
+            Points minMaxSizeOfBoard = new Points(k_MinBoardSize, k_MaxBoardSize);
             Points playerMoveIndices = new Points(0, 0);
-            int[] results = new int[r_MaxNumOfPlayers];
+            int[] results = new int[k_MaxNumOfPlayers];
             byte boardSize = 0;
             byte numOfPlayers = 0;
             int roundResult = 0;
 
-            while(!minMaxSizeOfBoard.IsUserWantsToQuit && !minAndMaxNumberOfPlayers.IsUserWantsToQuit && !playerMoveIndices.IsUserWantsToQuit)
+            while (!minMaxSizeOfBoard.IsUserWantsToQuit && !minAndMaxNumberOfPlayers.IsUserWantsToQuit && !playerMoveIndices.IsUserWantsToQuit)
             {
-                if (boardSize == 0 && numOfPlayers ==0)
+                if (boardSize == 0 && numOfPlayers == 0)
                 {
                     boardSize = (byte)GameUi.getBoardSizeFromUser(minMaxSizeOfBoard);
                     numOfPlayers = (byte)GameUi.GetNumberOfPlayers(minAndMaxNumberOfPlayers);
@@ -45,6 +37,11 @@ namespace RunGame
 
                 roundResult = singleRun(boardSize, numOfPlayers, ref playerMoveIndices);
                 GameUtils.UpdatesResultArray(results, roundResult);
+
+                if(playerMoveIndices.IsUserWantsToQuit)
+                {
+                    break;
+                }
 
                 if (!GameUi.IsPlayerWantsAnotherRound(results))
                 {
@@ -61,10 +58,10 @@ namespace RunGame
             GameUtils.PrintBoard(round.Board);
             int lastPlayerPlayed = 0;
 
-            while (!i_PlayerMovesIndices.IsUserWantsToQuit && !round.isThereAWin())
+            while (!i_PlayerMovesIndices.IsUserWantsToQuit && !round.IsThereAWin())
             {
 
-                if(!round.FirstPlayerTurn && i_NumOfPlayers == 1)
+                if (!round.FirstPlayerTurn && i_NumOfPlayers == 1)
                 {
                     i_PlayerMovesIndices = GameUtils.createRandomMoveIndices(round);
                 }
@@ -74,6 +71,12 @@ namespace RunGame
                 }
 
                 lastPlayerPlayed = GameUtils.MakeTheMove(round, i_PlayerMovesIndices);
+                GameUtils.PrintLastMoveIndices(i_PlayerMovesIndices, lastPlayerPlayed);
+
+                if (round.IsThereAWin()){
+                    lastPlayerPlayed = round.GetPlayerSign();
+                    break;
+                }
 
                 if (round.IsThereTie())
                 {

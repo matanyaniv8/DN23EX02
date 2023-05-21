@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Ex02.ConsoleUtils;
-using Board = TicTacToeLogic.TicTacToeLogic;
+using Board = InverseTicTacToeLogic.InverseTicTacToeLogic;
 
-namespace TIcTacToeUtils
+namespace InverseTicTacToeUtils
 {
-    internal class TicTacToeUtils
+    internal class InverseTicTacToeUtils
     {
         private static readonly bool r_isValid = true;
+        private const byte r_FirstPlayerSign = 1;
+        private const byte r_SecondPlayerSign = 2;
 
-        internal static bool isUserInputAValidNumber(int i_UserInput, Coords i_MinMaxValue)
+        internal static bool isUserInputAValidNumber(int i_UserInput, PointsForGame i_MinMaxValue)
         {
             bool isInputValid = !r_isValid;
 
-            if (i_UserInput >= i_MinMaxValue.RowIndex && i_UserInput <= i_MinMaxValue.ColumnIndex)
+            if (i_UserInput >= i_MinMaxValue.RowIndexOrMinValue && i_UserInput <= i_MinMaxValue.ColumnIndexOrMaxValue)
             {
                 isInputValid = r_isValid;
             }
@@ -24,29 +22,29 @@ namespace TIcTacToeUtils
             return isInputValid;
         }
 
-        internal static byte MakeTheMove(Board i_GameBoard, Coords i_UserIndices)
+        internal static byte MakeTheMove(Board i_GameBoard, PointsForGame i_UserIndices)
         {
             byte playerMoveId = 0;
 
             if (isSlotExistAndEmpty(i_GameBoard, i_UserIndices))
             {
-                playerMoveId = i_GameBoard.PlayMove(i_UserIndices.RowIndex - 1, i_UserIndices.ColumnIndex - 1);
+                playerMoveId = i_GameBoard.PlayMove(i_UserIndices.RowIndexOrMinValue - 1, i_UserIndices.ColumnIndexOrMaxValue - 1);
             }
             PrintBoard(i_GameBoard.Board);
-     
+
             return playerMoveId;
         }
 
-        internal static Coords createRandomMoveIndices(Board i_GameBoard)
+        internal static PointsForGame createRandomMoveIndices(Board i_GameBoard)
         {
             Random rnd_generates = new Random();
-            Coords indices = new Coords(0,0);
+            PointsForGame indices = new PointsForGame(0, 0);
             bool isRandomSlotAvailable = !r_isValid;
 
             while (isRandomSlotAvailable == !r_isValid)
             {
-                indices.RowIndex = (byte)rnd_generates.Next(1, i_GameBoard.BoardSize + 1);
-                indices.ColumnIndex = (byte)rnd_generates.Next(1, i_GameBoard.BoardSize + 1);
+                indices.RowIndexOrMinValue = (byte)rnd_generates.Next(1, i_GameBoard.BoardSize + 1);
+                indices.ColumnIndexOrMaxValue = (byte)rnd_generates.Next(1, i_GameBoard.BoardSize + 1);
 
                 if (isSlotExistAndEmpty(i_GameBoard, indices))
                 {
@@ -57,16 +55,16 @@ namespace TIcTacToeUtils
             return indices;
         }
 
-        internal static bool isSlotExistAndEmpty(Board i_GameBoard, Coords i_Indices)
+        internal static bool isSlotExistAndEmpty(Board i_GameBoard, PointsForGame i_Indices)
         {
-            bool isEmpty = i_GameBoard.isSlotAvailable(i_Indices.RowIndex - 1, i_Indices.ColumnIndex - 1);
-         
+            bool isEmpty = i_GameBoard.isSlotAvailable(i_Indices.RowIndexOrMinValue - 1, i_Indices.ColumnIndexOrMaxValue - 1);
+
             return isEmpty;
         }
 
-        internal static bool isIndicesAreWithinRangeOfBoardSIze(Board i_GameBoard, Coords i_Indices)
+        internal static bool isIndicesAreWithinRangeOfBoardSIze(Board i_GameBoard, PointsForGame i_Indices)
         {
-            bool isIndicesWithinRange = i_GameBoard.isIndicesAreWithinRangeOfBoardSIze(i_Indices.RowIndex -1, i_Indices.ColumnIndex -1);
+            bool isIndicesWithinRange = i_GameBoard.isIndicesAreWithinRangeOfBoardSIze(i_Indices.RowIndexOrMinValue - 1, i_Indices.ColumnIndexOrMaxValue - 1);
 
             return isIndicesWithinRange;
         }
@@ -139,12 +137,12 @@ namespace TIcTacToeUtils
             {
                 int currentSlotValue = i_GameBoard[i_RowIndex, i];
 
-                if (currentSlotValue == 2)
+                if (currentSlotValue == r_SecondPlayerSign)
                 {
                     lineFromBoard.Append("O  |");
                 }
 
-                else if (currentSlotValue == 1)
+                else if (currentSlotValue == r_FirstPlayerSign)
                 {
                     lineFromBoard.Append("X  |");
                 }
@@ -158,24 +156,31 @@ namespace TIcTacToeUtils
             return lineFromBoard.ToString();
         }
 
-        internal static void UpdatesResultArray(int [] i_GameResults, int i_LastRoundResult)
+        internal static void UpdatesResultArray(int[] i_GameResults, int i_LastRoundResult)
         {
             if (i_LastRoundResult != 0)
             {
                 i_GameResults[i_LastRoundResult - 1]++;
             }
         }
+
+        internal static void PrintLastMoveIndices(PointsForGame i_Indices, int i_LastPlayerId)
+        {
+            char lastXorCircleMove = (i_LastPlayerId == r_FirstPlayerSign) ? 'X' : 'O';
+            string lastMoveLocation = String.Format(@"{0}'s Choice is {1}:{2}", lastXorCircleMove.ToString(),i_Indices.RowIndexOrMinValue, i_Indices.ColumnIndexOrMaxValue);
+            Console.WriteLine(lastMoveLocation);
+        }
     }
 
-    public struct Coords
+    public struct PointsForGame
     {
         private bool m_IsUserWantsToQuit;
-        private byte m_RowIndex;
-        private byte m_ColumnIndex;
-        internal Coords(byte i_RowIndex, byte i_ColumnIndxex)
+        private byte m_RowIndexOrMinValue;
+        private byte m_ColumnIndexOrMaxValue;
+        internal PointsForGame(byte i_RowIndexOrMinValueToSave, byte i_ColumnIndexOrMaxValueToSave)
         {
-            m_RowIndex = i_RowIndex;
-            m_ColumnIndex = i_ColumnIndxex;
+            m_RowIndexOrMinValue = i_RowIndexOrMinValueToSave;
+            m_ColumnIndexOrMaxValue = i_ColumnIndexOrMaxValueToSave;
             m_IsUserWantsToQuit = false;
         }
 
@@ -190,28 +195,28 @@ namespace TIcTacToeUtils
                 m_IsUserWantsToQuit = value;
             }
         }
-        internal byte RowIndex
+        internal byte RowIndexOrMinValue
         {
-            get 
-            { 
-                return m_RowIndex; 
+            get
+            {
+                return m_RowIndexOrMinValue;
             }
 
-            set 
+            set
             {
-                m_RowIndex = value; 
+                m_RowIndexOrMinValue = value;
             }
         }
-        internal byte ColumnIndex
+        internal byte ColumnIndexOrMaxValue
         {
-            get 
-            { 
-                return m_ColumnIndex; 
+            get
+            {
+                return m_ColumnIndexOrMaxValue;
             }
 
-            set 
-            { 
-                m_ColumnIndex = value;
+            set
+            {
+                m_ColumnIndexOrMaxValue = value;
             }
         }
     }
