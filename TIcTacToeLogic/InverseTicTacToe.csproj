@@ -40,8 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RunGame.cs" />
-    <Compile Include="TicTacToeGui.cs" />
+    <Compile Include="TicTacToeUi.cs" />
     <Compile Include="TicTacToeLogic.cs" />
+    <Compile Include="TicTacToeUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Ex02.ConsoleUtils">
