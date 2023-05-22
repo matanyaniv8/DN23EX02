@@ -7,8 +7,6 @@ namespace InverseTicTacToeUtils
     internal class InverseTicTacToeUtils
     {
         private static readonly bool r_isValid = true;
-        private const byte r_FirstPlayerSign = 1;
-        private const byte r_SecondPlayerSign = 2;
 
         internal static bool isUserInputAValidNumber(int i_UserInput, PointsForGame i_MinMaxValue)
         {
@@ -30,6 +28,7 @@ namespace InverseTicTacToeUtils
             {
                 playerMoveId = i_GameBoard.PlayMove(i_UserIndices.RowIndexOrMinValue - 1, i_UserIndices.ColumnIndexOrMaxValue - 1);
             }
+
             PrintBoard(i_GameBoard.Board);
 
             return playerMoveId;
@@ -83,7 +82,6 @@ namespace InverseTicTacToeUtils
                 {
                     boardPrint.AppendLine(linesSeprator);
                 }
-
                 else
                 {
                     boardPrint.AppendLine(getLineFromBoard(i / 2, i_Board));
@@ -122,7 +120,6 @@ namespace InverseTicTacToeUtils
                 {
                     columnsNumbers.Append(i.ToString() + "   ");
                 }
-
             }
 
             return columnsNumbers.ToString();
@@ -141,12 +138,10 @@ namespace InverseTicTacToeUtils
                 {
                     lineFromBoard.Append("O  |");
                 }
-
                 else if (currentSlotValue == Board.BoardSigns.FirstPlayerSign)
                 {
                     lineFromBoard.Append("X  |");
                 }
-
                 else
                 {
                     lineFromBoard.Append("   |");
@@ -173,7 +168,7 @@ namespace InverseTicTacToeUtils
 
         internal static void PrintErrorMessageInColor(string i_ErrorMessage) 
         {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(i_ErrorMessage);
             Console.ResetColor();
         }

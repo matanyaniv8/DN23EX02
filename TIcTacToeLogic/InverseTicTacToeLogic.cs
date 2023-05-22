@@ -10,7 +10,6 @@
             LastPlayerSign =2
         }
 
-
         private BoardSigns[,] m_Board;
         private readonly bool r_isValid = true;
         private int m_NumberOfMovesRemains = 0;
@@ -59,7 +58,7 @@
         {
             bool response = r_isValid;
 
-            if (!isSlotAvailable(i_Row, i_Column))
+            if (isSlotAvailable(i_Row, i_Column) != r_isValid)
             {
                 response = !r_isValid;
             }
@@ -71,7 +70,7 @@
         {
             BoardSigns playerSign = GetPlayerSign();
 
-            if (CanIMakeAMove(i_Row, i_Column))
+            if (CanIMakeAMove(i_Row, i_Column) == r_isValid)
             {
                 m_Board[i_Row, i_Column] = playerSign;
                 m_FirstPlayerMove = (playerSign == BoardSigns.FirstPlayerSign) ? !r_isValid : r_isValid;
@@ -85,7 +84,7 @@
         {
             bool isSlotAvailable = !r_isValid;
 
-            if (isIndicesAreWithinRangeOfBoardSIze(i_Row, i_Column))
+            if (isIndicesAreWithinRangeOfBoardSIze(i_Row, i_Column) == r_isValid)
             {
                 isSlotAvailable = (m_Board[i_Row, i_Column] == BoardSigns.EmptySlot) ? r_isValid : !r_isValid;
             }
@@ -122,7 +121,7 @@
             bool diagonalWinning = isDiagonlWinning();
             bool seconderyDiagonalWinning = isSeconderyDiagonalWinning();
 
-            if (horizontalWinning || verticalWinning || diagonalWinning || seconderyDiagonalWinning)
+            if ((horizontalWinning || verticalWinning || diagonalWinning || seconderyDiagonalWinning) == true)
             {
                 isWinning = r_isValid;
             }

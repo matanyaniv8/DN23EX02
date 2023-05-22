@@ -27,7 +27,7 @@ namespace RunGame
             byte numOfPlayers = 0;
             GameLogic.BoardSigns roundResult = 0;
 
-            while (!minMaxSizeOfBoard.IsUserWantsToQuit && !minAndMaxNumberOfPlayers.IsUserWantsToQuit && !playerMoveIndices.IsUserWantsToQuit)
+            while (minMaxSizeOfBoard.IsUserWantsToQuit == false && minAndMaxNumberOfPlayers.IsUserWantsToQuit == false && playerMoveIndices.IsUserWantsToQuit == false)
             {
                 if (boardSize == 0 && numOfPlayers == 0)
                 {
@@ -60,7 +60,6 @@ namespace RunGame
 
             while (!i_PlayerMovesIndices.IsUserWantsToQuit && !round.IsThereAWin())
             {
-
                 if (!round.FirstPlayerTurn && i_NumOfPlayers == 1)
                 {
                     i_PlayerMovesIndices = GameUtils.createRandomMoveIndices(round);

@@ -48,7 +48,7 @@ it's a game for 2, to play against the computer press 1, else press 2.");
             String userInput = Console.ReadLine();
             int numberOfPlayers = k_PlayerWantsToQuitIntSign;
 
-            if (!isUserWantsToQuit(userInput, ref i_MinAndMaxNumOfPlayers))
+            if (isUserWantsToQuit(userInput, ref i_MinAndMaxNumOfPlayers) == false)
             {
                 bool isInputValidNumber = int.TryParse(userInput, out numberOfPlayers);
 
@@ -113,7 +113,7 @@ it's a game for 2, to play against the computer press 1, else press 2.");
             string userInput = Console.ReadLine();
             PointsForGame indices = new PointsForGame(0, 0);
 
-            if (!isUserWantsToQuit(userInput, ref indices))
+            if (isUserWantsToQuit(userInput, ref indices) == false)
             {
                 indices = convertStringsToCoordsIndices(userInput, seperator);
             }
@@ -159,13 +159,13 @@ it's a game for 2, to play against the computer press 1, else press 2.");
             bool isUserInputValid = GameUtils.isUserInputAValidNumber(numberToReturn, i_MinAndMaxValues);
             bool isUserWantsQuit = isUserWantsToQuit(userInput, ref i_MinAndMaxValues);
 
-            while (isUserInputValid == !r_isValid && !isUserWantsQuit)
+            while (isUserInputValid != r_isValid && isUserWantsQuit == false)
             {
                 GameUtils.PrintErrorMessageInColor(i_ErrorMessage);
                 userInput = Console.ReadLine();
                 isUserWantsQuit = isUserWantsToQuit(userInput, ref i_MinAndMaxValues);
 
-                if (isUserWantsQuit)
+                if (isUserWantsQuit == true)
                 {
                     numberToReturn = k_PlayerWantsToQuitIntSign;
                     break;
@@ -178,13 +178,13 @@ it's a game for 2, to play against the computer press 1, else press 2.");
             return numberToReturn;
         }
 
-        private static bool isUserWantsToQuit(string i_userInput, ref PointsForGame i_Indices)
+        private static bool isUserWantsToQuit(string i_userInput, ref PointsForGame io_Indices)
         {
             bool isUserWantsToQuitFromGame = i_userInput.Equals(k_PlayerWantsToQuitSign1) || i_userInput.Equals(k_PlayerWantsToQuitSign2);
 
-            if (isUserWantsToQuitFromGame)
+            if (isUserWantsToQuitFromGame == true)
             {
-                i_Indices.IsUserWantsToQuit = r_isValid;
+                io_Indices.IsUserWantsToQuit = r_isValid;
             }
 
             return isUserWantsToQuitFromGame;
@@ -193,17 +193,19 @@ it's a game for 2, to play against the computer press 1, else press 2.");
         internal static bool IsPlayerWantsAnotherRound(int[] i_Results)
         {
             bool isThereAntoherRound = !r_isValid;
-            string scoresDetails = String.Format(@"Final Results are: 
+            string scoresDetails = String.Format(@"
+Final Results are: 
+=================
 X has won {0} times.
 O has Won {1} times.
 If you want another round, please press {2} or {3}", i_Results[0].ToString(), i_Results[1].ToString(), k_PlayerWantsAnotherRoundSign1, k_PlayerWantsAnotherRoundSign2);
 
-            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(scoresDetails);
             Console.ResetColor();
             string userResponse = Console.ReadLine();
 
-            if (userResponse.Equals(k_PlayerWantsAnotherRoundSign1) || userResponse.Equals(k_PlayerWantsAnotherRoundSign2))
+            if (userResponse.Equals(k_PlayerWantsAnotherRoundSign1) == r_isValid || userResponse.Equals(k_PlayerWantsAnotherRoundSign2) == r_isValid)
             {
                 isThereAntoherRound = r_isValid;
             }
