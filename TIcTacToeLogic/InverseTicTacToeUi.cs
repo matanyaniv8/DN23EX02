@@ -106,7 +106,7 @@ it's a game for 2, to play against the computer press 1, else press 2.");
 
         private static PointsForGame askPlayerForAMove()
         {
-            string askForIndices = String.Format(@"Enter you're move with the format - Row Number:Column Number.");
+            string askForIndices = String.Format(@"Enter your move with the format - Row Number:Column Number.");
             Console.WriteLine(askForIndices);
 
             char seperator = ':';
