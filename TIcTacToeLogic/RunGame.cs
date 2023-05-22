@@ -25,7 +25,7 @@ namespace RunGame
             int[] results = new int[k_MaxNumOfPlayers];
             byte boardSize = 0;
             byte numOfPlayers = 0;
-            int roundResult = 0;
+            GameLogic.BoardSigns roundResult = 0;
 
             while (!minMaxSizeOfBoard.IsUserWantsToQuit && !minAndMaxNumberOfPlayers.IsUserWantsToQuit && !playerMoveIndices.IsUserWantsToQuit)
             {
@@ -52,11 +52,11 @@ namespace RunGame
             return;
         }
 
-        private static int singleRun(byte i_BoardSize, byte i_NumOfPlayers, ref Points i_PlayerMovesIndices)
+        private static GameLogic.BoardSigns singleRun(byte i_BoardSize, byte i_NumOfPlayers, ref Points i_PlayerMovesIndices)
         {
             GameLogic round = new GameLogic(i_BoardSize);
             GameUtils.PrintBoard(round.Board);
-            int lastPlayerPlayed = 0;
+            GameLogic.BoardSigns lastPlayerPlayed = 0;
 
             while (!i_PlayerMovesIndices.IsUserWantsToQuit && !round.IsThereAWin())
             {

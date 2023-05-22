@@ -3,18 +3,23 @@
 
     internal class InverseTicTacToeLogic
     {
-        private byte[,] m_Board;
-        private const byte k_AvailableSlotSign = 0;
+        internal enum BoardSigns
+        {
+            EmptySlot = 0,
+            FirstPlayerSign =1,
+            LastPlayerSign =2
+        }
+
+
+        private BoardSigns[,] m_Board;
         private readonly bool r_isValid = true;
         private int m_NumberOfMovesRemains = 0;
         private bool m_FirstPlayerMove = true;
-        private readonly byte r_FirstPlayerSign = 1;
-        private readonly byte r_SecondPlayerSign = 2;
 
         public InverseTicTacToeLogic(int i_BoardSize)
         {
             m_NumberOfMovesRemains = i_BoardSize * i_BoardSize;
-            m_Board = new byte[i_BoardSize, i_BoardSize];
+            m_Board = new BoardSigns[i_BoardSize, i_BoardSize];
             m_FirstPlayerMove = true;
         }
         
@@ -34,7 +39,7 @@
             }
         }
 
-        internal byte[,] Board
+        internal BoardSigns[,] Board
         {
             get
             {
@@ -62,14 +67,14 @@
             return response;
         }
 
-        public byte PlayMove(int i_Row, int i_Column)
+        public BoardSigns PlayMove(int i_Row, int i_Column)
         {
-            byte playerSign = GetPlayerSign();
+            BoardSigns playerSign = GetPlayerSign();
 
             if (CanIMakeAMove(i_Row, i_Column))
             {
                 m_Board[i_Row, i_Column] = playerSign;
-                m_FirstPlayerMove = (playerSign == r_FirstPlayerSign) ? !r_isValid : r_isValid;
+                m_FirstPlayerMove = (playerSign == BoardSigns.FirstPlayerSign) ? !r_isValid : r_isValid;
                 m_NumberOfMovesRemains--;
             }
 
@@ -82,7 +87,7 @@
 
             if (isIndicesAreWithinRangeOfBoardSIze(i_Row, i_Column))
             {
-                isSlotAvailable = (m_Board[i_Row, i_Column] == k_AvailableSlotSign) ? r_isValid : !r_isValid;
+                isSlotAvailable = (m_Board[i_Row, i_Column] == BoardSigns.EmptySlot) ? r_isValid : !r_isValid;
             }
 
             return isSlotAvailable;
@@ -145,13 +150,13 @@
         private bool rowHorizontallWinning(int i_RowIndex)
         {
             bool isElementsSeenSoFarAreTheSame = r_isValid;
-            byte firstResult = m_Board[i_RowIndex, 0];
+            BoardSigns firstResult = m_Board[i_RowIndex, 0];
 
             for (int col = 0; col < BoardSize; col++)
             {
-                byte horizontalElement = m_Board[i_RowIndex, col];
+                BoardSigns horizontalElement = m_Board[i_RowIndex, col];
 
-                if (firstResult != horizontalElement || firstResult == k_AvailableSlotSign)
+                if (firstResult != horizontalElement || firstResult == BoardSigns.EmptySlot)
                 {
                     isElementsSeenSoFarAreTheSame = !r_isValid;
                     break;
@@ -181,13 +186,13 @@
         private bool colVerticalWinning(int i_ColIndex)
         {
             bool isElementsSeenSoFarAreTheSame = r_isValid;
-            byte firstElement = m_Board[0, i_ColIndex];
+            BoardSigns firstElement = m_Board[0, i_ColIndex];
 
             for (int row = 1; row < BoardSize; row++)
             {
-                byte verticalElement = m_Board[row, i_ColIndex];
+                BoardSigns verticalElement = m_Board[row, i_ColIndex];
 
-                if (firstElement != verticalElement || firstElement == k_AvailableSlotSign)
+                if (firstElement != verticalElement || firstElement == BoardSigns.EmptySlot)
                 {
                     isElementsSeenSoFarAreTheSame = !r_isValid;
                     break;
@@ -200,13 +205,13 @@
         private bool isDiagonlWinning()
         {
             bool isElementsSeenSoFarAreTheSame = r_isValid;
-            byte firstElement = m_Board[0, 0];
+            BoardSigns firstElement = m_Board[0, 0];
 
             for (int i = 1; i < BoardSize; i++)
             {
-                byte diagonalElement = m_Board[i, i];
+                BoardSigns diagonalElement = m_Board[i, i];
 
-                if (firstElement != diagonalElement || firstElement == k_AvailableSlotSign)
+                if (firstElement != diagonalElement || firstElement == BoardSigns.EmptySlot)
                 {
                     isElementsSeenSoFarAreTheSame = !r_isValid;
                     break;
@@ -219,13 +224,13 @@
         private bool isSeconderyDiagonalWinning()
         {
             bool isElementsSeenSoFarAreTheSame = r_isValid;
-            byte firstElement = m_Board[0, BoardSize - 1];
+            BoardSigns firstElement = m_Board[0, BoardSize - 1];
 
             for (int i = 0; i < BoardSize; i++)
             {
-                byte seconderyDiagonalElement = m_Board[i, BoardSize - i - 1];
+                BoardSigns seconderyDiagonalElement = m_Board[i, BoardSize - i - 1];
 
-                if (seconderyDiagonalElement != firstElement || firstElement == k_AvailableSlotSign)
+                if (seconderyDiagonalElement != firstElement || firstElement == BoardSigns.EmptySlot)
                 {
                     isElementsSeenSoFarAreTheSame = !r_isValid;
                     break;
@@ -235,9 +240,9 @@
             return isElementsSeenSoFarAreTheSame;
         }
 
-        internal byte GetPlayerSign()
+        internal BoardSigns GetPlayerSign()
         {
-            byte sign = m_FirstPlayerMove ? r_FirstPlayerSign : r_SecondPlayerSign;
+            BoardSigns sign = m_FirstPlayerMove ? BoardSigns.FirstPlayerSign : BoardSigns.LastPlayerSign;
             return sign;
         }
     }

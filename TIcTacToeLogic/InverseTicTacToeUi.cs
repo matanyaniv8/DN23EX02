@@ -97,7 +97,7 @@ it's a game for 2, to play against the computer press 1, else press 2.");
                     possibleErrorType = "Out Of Moves";
                 }
 
-                Console.WriteLine(possibleErrorType);
+                GameUtils.PrintErrorMessageInColor(possibleErrorType);
                 indices = askPlayerForAMove();
             }
 
@@ -152,7 +152,7 @@ it's a game for 2, to play against the computer press 1, else press 2.");
 
         private static int getInputFromUserOnNotValidInput(String i_ErrorMessage, PointsForGame i_MinAndMaxValues)
         {
-            Console.WriteLine(i_ErrorMessage);
+            GameUtils.PrintErrorMessageInColor(i_ErrorMessage);
             String userInput = Console.ReadLine();
             int numberToReturn = 0;
             bool digitToByte = int.TryParse(userInput, out numberToReturn);
@@ -161,7 +161,7 @@ it's a game for 2, to play against the computer press 1, else press 2.");
 
             while (isUserInputValid == !r_isValid && !isUserWantsQuit)
             {
-                Console.WriteLine(i_ErrorMessage);
+                GameUtils.PrintErrorMessageInColor(i_ErrorMessage);
                 userInput = Console.ReadLine();
                 isUserWantsQuit = isUserWantsToQuit(userInput, ref i_MinAndMaxValues);
 
@@ -198,7 +198,9 @@ X has won {0} times.
 O has Won {1} times.
 If you want another round, please press {2} or {3}", i_Results[0].ToString(), i_Results[1].ToString(), k_PlayerWantsAnotherRoundSign1, k_PlayerWantsAnotherRoundSign2);
 
+            Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine(scoresDetails);
+            Console.ResetColor();
             string userResponse = Console.ReadLine();
 
             if (userResponse.Equals(k_PlayerWantsAnotherRoundSign1) || userResponse.Equals(k_PlayerWantsAnotherRoundSign2))

@@ -22,9 +22,9 @@ namespace InverseTicTacToeUtils
             return isInputValid;
         }
 
-        internal static byte MakeTheMove(Board i_GameBoard, PointsForGame i_UserIndices)
+        internal static Board.BoardSigns MakeTheMove(Board i_GameBoard, PointsForGame i_UserIndices)
         {
-            byte playerMoveId = 0;
+            Board.BoardSigns playerMoveId = 0;
 
             if (isSlotExistAndEmpty(i_GameBoard, i_UserIndices))
             {
@@ -69,7 +69,7 @@ namespace InverseTicTacToeUtils
             return isIndicesWithinRange;
         }
 
-        internal static void PrintBoard(byte[,] i_Board)
+        internal static void PrintBoard(Board.BoardSigns[,] i_Board)
         {
             Ex02.ConsoleUtils.Screen.Clear();
             int boardSize = i_Board.GetLength(0);
@@ -128,21 +128,21 @@ namespace InverseTicTacToeUtils
             return columnsNumbers.ToString();
         }
 
-        private static String getLineFromBoard(int i_RowIndex, byte[,] i_GameBoard)
+        private static String getLineFromBoard(int i_RowIndex, Board.BoardSigns[,] i_GameBoard)
         {
             StringBuilder lineFromBoard = new StringBuilder();
             lineFromBoard.Append((i_RowIndex + 1).ToString() + "|");
 
             for (int i = 0; i < i_GameBoard.GetLength(0); i++)
             {
-                int currentSlotValue = i_GameBoard[i_RowIndex, i];
+                Board.BoardSigns currentSlotValue = i_GameBoard[i_RowIndex, i];
 
-                if (currentSlotValue == r_SecondPlayerSign)
+                if (currentSlotValue == Board.BoardSigns.LastPlayerSign)
                 {
                     lineFromBoard.Append("O  |");
                 }
 
-                else if (currentSlotValue == r_FirstPlayerSign)
+                else if (currentSlotValue == Board.BoardSigns.FirstPlayerSign)
                 {
                     lineFromBoard.Append("X  |");
                 }
@@ -156,19 +156,26 @@ namespace InverseTicTacToeUtils
             return lineFromBoard.ToString();
         }
 
-        internal static void UpdatesResultArray(int[] i_GameResults, int i_LastRoundResult)
+        internal static void UpdatesResultArray(int[] i_GameResults, Board.BoardSigns i_LastRoundResult)
         {
             if (i_LastRoundResult != 0)
             {
-                i_GameResults[i_LastRoundResult - 1]++;
+                i_GameResults[(int)i_LastRoundResult - 1]++;
             }
         }
 
-        internal static void PrintLastMoveIndices(PointsForGame i_Indices, int i_LastPlayerId)
+        internal static void PrintLastMoveIndices(PointsForGame i_Indices, Board.BoardSigns i_LastPlayerId)
         {
-            char lastXorCircleMove = (i_LastPlayerId == r_FirstPlayerSign) ? 'X' : 'O';
+            char lastXorCircleMove = (i_LastPlayerId == Board.BoardSigns.FirstPlayerSign) ? 'X' : 'O';
             string lastMoveLocation = String.Format(@"{0}'s Choice is {1}:{2}", lastXorCircleMove.ToString(),i_Indices.RowIndexOrMinValue, i_Indices.ColumnIndexOrMaxValue);
             Console.WriteLine(lastMoveLocation);
+        }
+
+        internal static void PrintErrorMessageInColor(string i_ErrorMessage) 
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine(i_ErrorMessage);
+            Console.ResetColor();
         }
     }
 
