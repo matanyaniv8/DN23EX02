@@ -41,7 +41,7 @@
   <ItemGroup>
     <Compile Include="RunGame.cs" />
     <Compile Include="InverseTicTacToeUi.cs" />
-    <Compile Include="InverseTicTacToeLogic.cs" />
+    <Compile Include="ReverseTicTacToeLogic.cs" />
     <Compile Include="InverseTicTacToeUtils.cs" />
   </ItemGroup>
   <ItemGroup>

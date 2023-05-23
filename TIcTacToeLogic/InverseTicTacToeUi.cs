@@ -1,7 +1,7 @@
 ﻿using System;
 using GameUtils = InverseTicTacToeUtils.InverseTicTacToeUtils;
 using PointsForGame = InverseTicTacToeUtils.PointsForGame;
-using Board = InverseTicTacToeLogic.InverseTicTacToeLogic;
+using Board = ReverseTicTacToeLogic.ReverseTicTacToeLogic;
 
 namespace InverseTicTacToeUi
 {
@@ -15,24 +15,25 @@ namespace InverseTicTacToeUi
 
         private static readonly bool r_isValid = true;
 
-        internal static int getBoardSizeFromUser(PointsForGame i_MinANdMaxAcceptedValue)
+        internal static int getBoardSizeFromUser()
         {
+            PointsForGame MinAndMaxBoardSize = new PointsForGame(Board.MinimalBoardSize, Board.MaximalBoardSize);
             String openingMessage = String.Format(@"Hi, Welcome to TicTacToe game.
-Please enter a number in range {0} - {1}, as the board's size.", i_MinANdMaxAcceptedValue.RowIndexOrMinValue, i_MinANdMaxAcceptedValue.ColumnIndexOrMaxValue);
+Please enter a number in range {0} - {1}, as the board's size.", MinAndMaxBoardSize.RowIndexOrMinValue, MinAndMaxBoardSize.ColumnIndexOrMaxValue);
 
             Console.WriteLine(openingMessage);
             String userInput = Console.ReadLine();
             int userInputAsByte = k_PlayerWantsToQuitIntSign;
 
-            if (!isUserWantsToQuit(userInput, ref i_MinANdMaxAcceptedValue))
+            if (!isUserWantsToQuit(userInput, ref MinAndMaxBoardSize))
             {
-                bool digitToByte = int.TryParse(userInput, out userInputAsByte);
-                bool isUserInputValid = GameUtils.isUserInputAValidNumber(userInputAsByte, i_MinANdMaxAcceptedValue);
+                bool digitToInt = int.TryParse(userInput, out userInputAsByte);
+                bool isUserInputValid = GameUtils.isUserInputAValidNumber(userInputAsByte, MinAndMaxBoardSize);
 
                 if (isUserInputValid == !r_isValid)
                 {
-                    String message = String.Format(@"Wrong input, please enter size board in range {0} - {1}.", i_MinANdMaxAcceptedValue.RowIndexOrMinValue, i_MinANdMaxAcceptedValue.ColumnIndexOrMaxValue);
-                    userInputAsByte = getInputFromUserOnNotValidInput(message, i_MinANdMaxAcceptedValue);
+                    String message = String.Format(@"Wrong input, please enter size board in range {0} - {1}.", MinAndMaxBoardSize.RowIndexOrMinValue, MinAndMaxBoardSize.ColumnIndexOrMaxValue);
+                    userInputAsByte = getInputFromUserOnNotValidInput(message, MinAndMaxBoardSize);
                 }
             }
 
@@ -69,7 +70,6 @@ it's a game for 2, to play against the computer press 1, else press 2.");
             PointsForGame indices = askPlayerForAMove();
             string possibleErrorType = "";
             bool isMoveApproved = !r_isValid;
-
 
             while (isMoveApproved != r_isValid && indices.IsUserWantsToQuit == !r_isValid)
             {

@@ -1,7 +1,7 @@
 ﻿using GameUi = InverseTicTacToeUi.InverseTicTacToeUi;
 using GameUtils = InverseTicTacToeUtils.InverseTicTacToeUtils;
 using Points = InverseTicTacToeUtils.PointsForGame;
-using GameLogic = InverseTicTacToeLogic.InverseTicTacToeLogic;
+using GameLogic = ReverseTicTacToeLogic.ReverseTicTacToeLogic;
 
 namespace RunGame
 {
@@ -23,15 +23,15 @@ namespace RunGame
             Points minMaxSizeOfBoard = new Points(k_MinBoardSize, k_MaxBoardSize);
             Points playerMoveIndices = new Points(0, 0);
             int[] results = new int[k_MaxNumOfPlayers];
-            byte boardSize = 0;
-            byte numOfPlayers = 0;
+            int boardSize = 0;
+            int numOfPlayers = 0;
             GameLogic.BoardSigns roundResult = 0;
 
             while (minMaxSizeOfBoard.IsUserWantsToQuit == false && minAndMaxNumberOfPlayers.IsUserWantsToQuit == false && playerMoveIndices.IsUserWantsToQuit == false)
             {
                 if (boardSize == 0 && numOfPlayers == 0)
                 {
-                    boardSize = (byte)GameUi.getBoardSizeFromUser(minMaxSizeOfBoard);
+                    boardSize = GameUi.getBoardSizeFromUser();
                     numOfPlayers = (byte)GameUi.GetNumberOfPlayers(minAndMaxNumberOfPlayers);
                 }
 
@@ -52,7 +52,7 @@ namespace RunGame
             return;
         }
 
-        private static GameLogic.BoardSigns singleRun(byte i_BoardSize, byte i_NumOfPlayers, ref Points i_PlayerMovesIndices)
+        private static GameLogic.BoardSigns singleRun(int i_BoardSize, int i_NumOfPlayers, ref Points i_PlayerMovesIndices)
         {
             GameLogic round = new GameLogic(i_BoardSize);
             GameUtils.PrintBoard(round.Board);

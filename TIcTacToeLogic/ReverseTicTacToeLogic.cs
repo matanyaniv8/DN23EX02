@@ -1,9 +1,8 @@
-﻿namespace InverseTicTacToeLogic
+﻿namespace ReverseTicTacToeLogic
 {
-
-    internal class InverseTicTacToeLogic
+    public class ReverseTicTacToeLogic
     {
-        internal enum BoardSigns
+        public enum BoardSigns
         {
             EmptySlot = 0,
             FirstPlayerSign =1,
@@ -11,18 +10,39 @@
         }
 
         private BoardSigns[,] m_Board;
+        private static readonly int r_MinimalBoardSize = 3;
+        private static readonly int r_MaximalBoardSize = 9;
         private readonly bool r_isValid = true;
         private int m_NumberOfMovesRemains = 0;
         private bool m_FirstPlayerMove = true;
 
-        public InverseTicTacToeLogic(int i_BoardSize)
+        public ReverseTicTacToeLogic(int i_BoardSize)
         {
-            m_NumberOfMovesRemains = i_BoardSize * i_BoardSize;
-            m_Board = new BoardSigns[i_BoardSize, i_BoardSize];
-            m_FirstPlayerMove = true;
+            if(i_BoardSize >= r_MinimalBoardSize && i_BoardSize <= r_MaximalBoardSize)
+            {
+                m_NumberOfMovesRemains = i_BoardSize * i_BoardSize;
+                m_Board = new BoardSigns[i_BoardSize, i_BoardSize];
+                m_FirstPlayerMove = true;
+            }   
         }
         
-        internal int BoardSize
+        public static int MinimalBoardSize
+        {
+            get
+            {
+                return r_MinimalBoardSize;
+            }
+        }
+
+        public static int MaximalBoardSize
+        {
+            get 
+            { 
+                return r_MaximalBoardSize; 
+            }
+        }
+
+        public int BoardSize
         {
             get 
             { 
@@ -30,7 +50,7 @@
             }
         }
 
-        internal bool FirstPlayerTurn
+        public bool FirstPlayerTurn
         {
             get 
             { 
@@ -38,7 +58,7 @@
             }
         }
 
-        internal BoardSigns[,] Board
+        public BoardSigns[,] Board
         {
             get
             {
@@ -46,7 +66,7 @@
             }
         }
 
-        internal int NumberOfMovesRemains
+        public int NumberOfMovesRemains
         {
             get
             {
@@ -54,7 +74,7 @@
             }
         }
 
-        internal bool CanIMakeAMove(int i_Row, int i_Column)
+        public bool CanIMakeAMove(int i_Row, int i_Column)
         {
             bool response = r_isValid;
 
@@ -80,11 +100,11 @@
             return playerSign;
         }
 
-        internal bool isSlotAvailable(int i_Row, int i_Column)
+        public bool isSlotAvailable(int i_Row, int i_Column)
         {
             bool isSlotAvailable = !r_isValid;
 
-            if (isIndicesAreWithinRangeOfBoardSIze(i_Row, i_Column) == r_isValid)
+            if (IsIndicesAreWithinRangeOfBoardSIze(i_Row, i_Column) == r_isValid)
             {
                 isSlotAvailable = (m_Board[i_Row, i_Column] == BoardSigns.EmptySlot) ? r_isValid : !r_isValid;
             }
@@ -92,7 +112,7 @@
             return isSlotAvailable;
         }
 
-        internal bool isIndicesAreWithinRangeOfBoardSIze(int i_Row, int i_Column)
+        public bool IsIndicesAreWithinRangeOfBoardSIze(int i_Row, int i_Column)
         {
             bool isColumnWithInRange = i_Column >= 0 && i_Column < BoardSize;
             bool isRowWithInRange = i_Row >= 0 && i_Row < BoardSize;
@@ -101,7 +121,13 @@
             return isIndicesAreWithinRange;
         }
 
-        internal bool IsThereTie()
+        public BoardSigns GetPlayerSign()
+        {
+            BoardSigns sign = m_FirstPlayerMove ? BoardSigns.FirstPlayerSign : BoardSigns.LastPlayerSign;
+            return sign;
+        }
+
+        public bool IsThereTie()
         {
             bool isATie = false;
 
@@ -113,7 +139,7 @@
             return isATie;
         }
 
-        internal bool IsThereAWin()
+        public bool IsThereAWin()
         {
             bool isWinning = !r_isValid;
             bool horizontalWinning = isHorizontalWinning();
@@ -237,12 +263,6 @@
             }
 
             return isElementsSeenSoFarAreTheSame;
-        }
-
-        internal BoardSigns GetPlayerSign()
-        {
-            BoardSigns sign = m_FirstPlayerMove ? BoardSigns.FirstPlayerSign : BoardSigns.LastPlayerSign;
-            return sign;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using Board = InverseTicTacToeLogic.InverseTicTacToeLogic;
+using Board = ReverseTicTacToeLogic.ReverseTicTacToeLogic;
 
 namespace InverseTicTacToeUtils
 {
@@ -63,7 +63,7 @@ namespace InverseTicTacToeUtils
 
         internal static bool isIndicesAreWithinRangeOfBoardSIze(Board i_GameBoard, PointsForGame i_Indices)
         {
-            bool isIndicesWithinRange = i_GameBoard.isIndicesAreWithinRangeOfBoardSIze(i_Indices.RowIndexOrMinValue - 1, i_Indices.ColumnIndexOrMaxValue - 1);
+            bool isIndicesWithinRange = i_GameBoard.IsIndicesAreWithinRangeOfBoardSIze(i_Indices.RowIndexOrMinValue - 1, i_Indices.ColumnIndexOrMaxValue - 1);
 
             return isIndicesWithinRange;
         }
@@ -177,9 +177,9 @@ namespace InverseTicTacToeUtils
     public struct PointsForGame
     {
         private bool m_IsUserWantsToQuit;
-        private byte m_RowIndexOrMinValue;
-        private byte m_ColumnIndexOrMaxValue;
-        internal PointsForGame(byte i_RowIndexOrMinValueToSave, byte i_ColumnIndexOrMaxValueToSave)
+        private int m_RowIndexOrMinValue;
+        private int m_ColumnIndexOrMaxValue;
+        internal PointsForGame(int i_RowIndexOrMinValueToSave, int i_ColumnIndexOrMaxValueToSave)
         {
             m_RowIndexOrMinValue = i_RowIndexOrMinValueToSave;
             m_ColumnIndexOrMaxValue = i_ColumnIndexOrMaxValueToSave;
@@ -197,7 +197,7 @@ namespace InverseTicTacToeUtils
                 m_IsUserWantsToQuit = value;
             }
         }
-        internal byte RowIndexOrMinValue
+        internal int RowIndexOrMinValue
         {
             get
             {
@@ -209,7 +209,7 @@ namespace InverseTicTacToeUtils
                 m_RowIndexOrMinValue = value;
             }
         }
-        internal byte ColumnIndexOrMaxValue
+        internal int ColumnIndexOrMaxValue
         {
             get
             {
