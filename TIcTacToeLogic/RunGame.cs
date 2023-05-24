@@ -27,12 +27,23 @@ namespace RunGame
             int numOfPlayers = 0;
             GameLogic.BoardSigns roundResult = 0;
 
-            while (minMaxSizeOfBoard.IsUserWantsToQuit == false && minAndMaxNumberOfPlayers.IsUserWantsToQuit == false && playerMoveIndices.IsUserWantsToQuit == false)
+            while (playerMoveIndices.IsUserWantsToQuit == false)
             {
                 if (boardSize == 0 && numOfPlayers == 0)
                 {
                     boardSize = GameUi.getBoardSizeFromUser();
-                    numOfPlayers = (byte)GameUi.GetNumberOfPlayers(minAndMaxNumberOfPlayers);
+
+                    if(boardSize == GameUi.k_PlayerWantsToQuitIntSign)
+                    {
+                        break;
+                    }
+                    numOfPlayers = GameUi.GetNumberOfPlayers(minAndMaxNumberOfPlayers);
+
+                    if(numOfPlayers == GameUi.k_PlayerWantsToQuitIntSign)
+                    {
+                        break;
+                    }
+
                 }
 
                 roundResult = singleRun(boardSize, numOfPlayers, ref playerMoveIndices);
@@ -55,7 +66,7 @@ namespace RunGame
         private static GameLogic.BoardSigns singleRun(int i_BoardSize, int i_NumOfPlayers, ref Points i_PlayerMovesIndices)
         {
             GameLogic round = new GameLogic(i_BoardSize);
-            GameUtils.PrintBoard(round.Board);
+            GameUtils.PrintBoard(round);
             GameLogic.BoardSigns lastPlayerPlayed = 0;
 
             while (!i_PlayerMovesIndices.IsUserWantsToQuit && !round.IsThereAWin())

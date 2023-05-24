@@ -11,7 +11,7 @@ namespace InverseTicTacToeUi
         private const String k_PlayerWantsToQuitSign2 = "q";
         private const string k_PlayerWantsAnotherRoundSign1 = "R";
         private const string k_PlayerWantsAnotherRoundSign2 = "r";
-        private const int k_PlayerWantsToQuitIntSign = -1;
+        internal const int k_PlayerWantsToQuitIntSign = -1;
 
         private static readonly bool r_isValid = true;
 

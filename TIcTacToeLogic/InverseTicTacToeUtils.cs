@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Board = ReverseTicTacToeLogic.ReverseTicTacToeLogic;
+using ConsoleUtils = Ex02.ConsoleUtils.Screen;
 
 namespace InverseTicTacToeUtils
 {
@@ -29,7 +30,7 @@ namespace InverseTicTacToeUtils
                 playerMoveId = i_GameBoard.PlayMove(i_UserIndices.RowIndexOrMinValue - 1, i_UserIndices.ColumnIndexOrMaxValue - 1);
             }
 
-            PrintBoard(i_GameBoard.Board);
+            PrintBoard(i_GameBoard);
 
             return playerMoveId;
         }
@@ -68,10 +69,11 @@ namespace InverseTicTacToeUtils
             return isIndicesWithinRange;
         }
 
-        internal static void PrintBoard(Board.BoardSigns[,] i_Board)
+        internal static void PrintBoard(Board i_Board)
         {
-            Ex02.ConsoleUtils.Screen.Clear();
-            int boardSize = i_Board.GetLength(0);
+            ConsoleUtils.Clear();
+            Board.BoardSigns [,] gameBoard = i_Board.Board;
+            int boardSize = i_Board.BoardSize;
             String linesSeprator = lineSeprator(boardSize);
             StringBuilder boardPrint = new StringBuilder();
             boardPrint.AppendLine(columnsNumbers(boardSize));
@@ -84,7 +86,7 @@ namespace InverseTicTacToeUtils
                 }
                 else
                 {
-                    boardPrint.AppendLine(getLineFromBoard(i / 2, i_Board));
+                    boardPrint.AppendLine(getLineFromBoard(i / 2, gameBoard));
                 }
             }
 
