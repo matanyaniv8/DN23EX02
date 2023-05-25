@@ -1,6 +1,6 @@
-﻿using GameUi = InverseTicTacToeUi.InverseTicTacToeUi;
-using GameUtils = InverseTicTacToeUtils.InverseTicTacToeUtils;
-using Points = InverseTicTacToeUtils.PointsForGame;
+﻿using GameUi = ReverseTicTacToeUi.ReverseTicTacToeUi;
+using GameUtils = ReverseTicTacToeUtils.ReverseTicTacToeUtils;
+using Points = ReverseTicTacToeUtils.PointsForGame;
 using GameLogic = ReverseTicTacToeLogic.ReverseTicTacToeLogic;
 
 namespace RunGame
@@ -25,27 +25,28 @@ namespace RunGame
             int[] results = new int[k_MaxNumOfPlayers];
             int boardSize = 0;
             int numOfPlayers = 0;
-            GameLogic.BoardSigns roundResult = 0;
+            GameLogic.eBoardSigns roundResult = 0;
 
-            while (playerMoveIndices.IsUserWantsToQuit == false)
+            while (!playerMoveIndices.IsUserWantsToQuit && minAndMaxNumberOfPlayers.IsUserWantsToQuit == false && minAndMaxNumberOfPlayers.IsUserWantsToQuit==false)
             {
                 if (boardSize == 0 && numOfPlayers == 0)
                 {
-                    boardSize = GameUi.getBoardSizeFromUser();
+                    boardSize = GameUi.GetBoardSizeFromUser();
 
                     if(boardSize == GameUi.k_PlayerWantsToQuitIntSign)
                     {
                         break;
                     }
+                    
                     numOfPlayers = GameUi.GetNumberOfPlayers(minAndMaxNumberOfPlayers);
 
-                    if(numOfPlayers == GameUi.k_PlayerWantsToQuitIntSign)
+                    if (numOfPlayers == GameUi.k_PlayerWantsToQuitIntSign)
                     {
                         break;
                     }
-
                 }
 
+                
                 roundResult = singleRun(boardSize, numOfPlayers, ref playerMoveIndices);
                 GameUtils.UpdatesResultArray(results, roundResult);
 
@@ -63,17 +64,17 @@ namespace RunGame
             return;
         }
 
-        private static GameLogic.BoardSigns singleRun(int i_BoardSize, int i_NumOfPlayers, ref Points i_PlayerMovesIndices)
+        private static GameLogic.eBoardSigns singleRun(int i_BoardSize, int i_NumOfPlayers, ref Points i_PlayerMovesIndices)
         {
             GameLogic round = new GameLogic(i_BoardSize);
             GameUtils.PrintBoard(round);
-            GameLogic.BoardSigns lastPlayerPlayed = 0;
+            GameLogic.eBoardSigns lastPlayerPlayed = 0;
 
             while (!i_PlayerMovesIndices.IsUserWantsToQuit && !round.IsThereAWin())
             {
                 if (!round.FirstPlayerTurn && i_NumOfPlayers == 1)
                 {
-                    i_PlayerMovesIndices = GameUtils.createRandomMoveIndices(round);
+                    i_PlayerMovesIndices = GameUtils.CreateRandomMoveIndices(round);
                 }
                 else
                 {

@@ -40,9 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RunGame.cs" />
-    <Compile Include="InverseTicTacToeUi.cs" />
+    <Compile Include="ReverseTicTacToeUi.cs" />
     <Compile Include="ReverseTicTacToeLogic.cs" />
-    <Compile Include="InverseTicTacToeUtils.cs" />
+    <Compile Include="ReverseTicTacToeUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Ex02.ConsoleUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
